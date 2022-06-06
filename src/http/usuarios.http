@@ -1,0 +1,61 @@
+//Teste de Requisições REST - Usuários
+//@baseURL = 
+@baseURL = http://localhost:4000/api
+@id = 629a17a26b4c3213e359a4ca
+###
+// GET - Lista todos os usuários
+GET {{baseURL}}/usuarios
+Content-Type: application/json
+
+###
+// GET - Lista apenas um usuário pelo id
+GET {{baseURL}}/usuarios/id/{{id}}
+Content-Type: application/json
+
+###
+// POST - Inclui um novo usuário
+POST {{baseURL}}/usuarios
+Content-Type: application/json
+
+{
+   "nome": "Felipe",
+   "email": "felipe@email.com",
+   "senha": "Teste123@"
+}
+
+### 
+// DELETE - Apaga um usuário através do id informado
+DELETE {{baseURL}}/usuarios/{{id}}
+Content-Type: application/json
+
+###
+// PUT - Altera um usuário pelo ID
+PUT {{baseURL}}/usuarios/{{id}}
+Content-Type: application/json
+
+{
+    "nome": "Augusto Lima",
+    "email": "augusto.lima@email.com",
+    "senha": "Teste123@",
+    "ativo": true,
+    "tipo": "Admin",
+    "avatar": "https://ui-avatars.com/api/?background=3700B3&color=FFFFFF&name=Augusto+Lima"
+  }
+
+###
+// POST - Efetuar o Login
+POST {{baseURL}}/usuarios/login
+Content-Type: application/json
+
+{
+   "email": "augusto.lima@email.com",
+   "senha": "Teste123@"
+}
+
+###
+// GET - Validar o token
+GET {{baseURL}}/usuarios/token
+Content-Type: application/json
+access-token: 
+
+

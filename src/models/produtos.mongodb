@@ -1,0 +1,42 @@
+//Selecione o database
+use('Hamburgueria')
+
+// Remove a collection
+db.prestadores.drop()
+ 
+db.createCollection('produtos', {
+    validator: {
+        $jsonSchema: {
+            bsonType: 'object',
+            required: ['nome','preco', 'tipo'],
+            properties: {
+                nome: {bsonType: 'string'},
+                descricao: {bsonType: 'string'},
+                preco: {bsonType: 'double'},                
+                tipo: {
+                    enum: ['Hamburguer', 'Bebidas', 'Porções'],
+                    description: 'O tipo de produto informado deve ser válido'
+                },
+                tamanho: {
+                    enum: ['Pequeno', 'Médio', 'Grande'],
+                    description: 'O tamanho do produto informado deve ser válido'
+                }                         
+            }
+        }
+    },
+    validationLevel: 'off', //strict-> aplica no insert e no update. moderate apenas no insert or off
+    validationAction: 'error' //error->rejeita o documento ou warn->registra no log mas permite a inclusão
+})
+
+db.usuarios.createIndex({ 'nome': 1 }, { unique: true })
+
+//Insere um novo registro
+db.produtos.insertOne({
+"nome": "X-Salada",
+"descricao": "Hamburguer 160gr + Salada",
+"preco": "15",
+"tipo": "Hamburguer",
+"tamanho": "Grande"
+})
+
+db.produtos.find()

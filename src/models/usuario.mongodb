@@ -1,0 +1,67 @@
+//Selecione o database
+use('Hamburgueria')
+
+// Remove a collection
+db.usuarios.drop()
+
+db.createCollection('usuarios', {
+    validator: {
+        $jsonSchema: {
+            bsonType: 'object',
+            required: ['nome', 'email', 'senha', 'ativo', 'tipo'],
+            properties: {
+                nome: {
+                    bsonType: 'string',
+                    minLength: 3,
+                    maxLength: 100,
+                    description: 'Nome deve ser um texto entre 3 a 100 caracteres e é obrigatório'
+                },
+                email: {
+                    bsonType: 'string',
+                    description: 'O e-mail é obrigatório'
+                },
+                senha: {
+                    bsonType: 'string',
+                    description: 'Senha do usuário criptografada'
+                },
+                ativo: {
+                    bsonType: 'bool',
+                    description: 'Usuário está ativo?'
+                },
+                tipo: {
+                    enum: ['Admin', 'Cliente'],
+                    description: 'O tipo do usuário informado deve ser válido'
+                },
+                avatar: {
+                    bsonType: 'string',
+                    description: 'URL do Avatar do usuário'
+                }
+            }
+        }
+    },
+    validationLevel: 'strict', //strict-> aplica no insert e no update. moderate apenas no insert or off
+    validationAction: 'error' //error->rejeita o documento ou warn->registra no log mas permite a inclusão
+
+})
+
+//Criando o índice único
+db.usuarios.createIndex({ 'email': 1 }, { unique: true })
+
+//Insere um novo registro
+db.usuarios.insertOne({
+    'nome': 'Claudia Almeida',
+    'email': 'claudia.almeida@email.com',
+    'senha': '123Mudar',
+    'ativo': true,
+    'tipo': 'Cliente',
+    'avatar': 'https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=Claudia+Almeida'
+})
+
+//Lista todos os registros
+db.usuarios.find()
+
+//Lista um registro pelo Id
+db.usuarios.find({ '_id': { $eq: ObjectId('629a203342ae0792d3fb560e') } })
+
+//Lista um usuário a partir do seu email
+db.usuarios.find({ email: { $eq: 'claudia.almeida@email.com' } })
